@@ -78,10 +78,9 @@ public class GroupAdapter extends Adapter<GroupModel, Group> {
         group.setExternalId(id);
         group.setDisplayName(displayName);
         var members = group.getMembers();
-        if (members.size() > 0) {
-            LOGGER.info("Group members: " + String.join(", ",
-                    members.stream().map(Member::getValue).map(x -> x.get()).collect(Collectors.toList())));
-        }
+        LOGGER.info("Group members: " + String.join(", ",
+                members.stream().map(Member::getValue).map(x -> x.get()).collect(Collectors.toList())));
+
         if (members.size() > 0) {
             var groupMembers = new ArrayList<Member>();
             for (var member : members) {
