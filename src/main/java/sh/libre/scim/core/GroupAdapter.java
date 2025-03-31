@@ -77,15 +77,17 @@ public class GroupAdapter extends Adapter<GroupModel, Group> {
         group.setId(externalId);
         group.setExternalId(id);
         group.setDisplayName(displayName);
+        var members = group.getMembers();
         if (members.size() > 0) {
-            LOGGER.info("Group members: " + String.join(", ", members));
+            LOGGER.info("Group members: " + String.join(", ",
+                    members.stream().map(Member::getValue).map(x -> x.get()).collect(Collectors.toList())));
         }
         if (members.size() > 0) {
             var groupMembers = new ArrayList<Member>();
             for (var member : members) {
                 var groupMember = new Member();
                 try {
-                    var userMapping = this.query("findById", member, "User").getSingleResult();
+                    var userMapping = this.query("findById", member.getValue().get(), "User").getSingleResult();
                     groupMember.setValue(userMapping.getExternalId());
                     var ref = new URI(String.format("Users/%s", userMapping.getExternalId()));
                     groupMember.setRef(ref.toString());
