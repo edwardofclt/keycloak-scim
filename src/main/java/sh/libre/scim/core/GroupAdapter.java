@@ -78,6 +78,9 @@ public class GroupAdapter extends Adapter<GroupModel, Group> {
         group.setExternalId(id);
         group.setDisplayName(displayName);
         if (members.size() > 0) {
+            LOGGER.info("Group members: " + String.join(", ", members));
+        }
+        if (members.size() > 0) {
             var groupMembers = new ArrayList<Member>();
             for (var member : members) {
                 var groupMember = new Member();
@@ -165,34 +168,34 @@ public class GroupAdapter extends Adapter<GroupModel, Group> {
                 groupMembers.add(Member.builder().value(userMapping.getExternalId()).build());
             }
             patchBuilder.addOperation()
-                .path("members")
-                .op(PatchOp.REPLACE)
-                .valueNodes(groupMembers)
-                .next()
-                .op(PatchOp.REPLACE)
-                .path("displayName")
-                .value(displayName)
-                .next()
-                .op(PatchOp.REPLACE)
-                .path("externalId")
-                .value(id)
-                .build();
+                    .path("members")
+                    .op(PatchOp.REPLACE)
+                    .valueNodes(groupMembers)
+                    .next()
+                    .op(PatchOp.REPLACE)
+                    .path("displayName")
+                    .value(displayName)
+                    .next()
+                    .op(PatchOp.REPLACE)
+                    .path("externalId")
+                    .value(id)
+                    .build();
         } else {
             patchBuilder.addOperation()
-                .path("members")
-                .op(PatchOp.REMOVE)
-                .value(null)
-                .next()
-                .op(PatchOp.REPLACE)
-                .path("displayName")
-                .value(displayName)
-                .next()
-                .op(PatchOp.REPLACE)
-                .path("externalId")
-                .value(id)
-                .build();
+                    .path("members")
+                    .op(PatchOp.REMOVE)
+                    .value(null)
+                    .next()
+                    .op(PatchOp.REPLACE)
+                    .path("displayName")
+                    .value(displayName)
+                    .next()
+                    .op(PatchOp.REPLACE)
+                    .path("externalId")
+                    .value(id)
+                    .build();
 
-            }
+        }
         LOGGER.info(patchBuilder.getResource());
         return patchBuilder;
     }
